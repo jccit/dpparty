@@ -1,18 +1,21 @@
 import IPlaybackState from "./IPlaybackState";
+import Redux from './Redux';
 
 export default class VideoPlayer {
     public onPlayToggled: (playing: boolean) => void;
     public onSeeked: (time: number) => void;
 
     private video?: HTMLVideoElement;
-    private updating = false;
-
     private lastSyncedTime = 0;
     private shouldPlay = false;
+
+    private redux = new Redux();
 
     setup() {
         const videoEl = document.querySelector<HTMLVideoElement>('video.btm-media-client-element');
         if (!videoEl) return false;
+
+        this.redux.findHooks();
 
         this.video = videoEl;
         this.video.addEventListener('play', this.eventHandler(this.handlePlayToggled.bind(this)));
@@ -37,9 +40,9 @@ export default class VideoPlayer {
             this.shouldPlay = playing;
 
             if (playing) {
-                this.video.play();
+                this.redux.play();
             } else {
-                this.video.pause();
+                this.redux.pause();
             }
         }
     }
@@ -59,7 +62,7 @@ export default class VideoPlayer {
     private hasChangedEnough() {
         const timeDif = Math.abs(this.video.currentTime - this.lastSyncedTime);
 
-        return timeDif > 0.2;
+        return timeDif > 0.5;
     }
 
     private eventHandler(callback: (e: any) => any) {
@@ -88,7 +91,9 @@ export default class VideoPlayer {
 
     private canPlay() {
         if (this.shouldPlay) {
-            this.video.play();
+            this.redux.play();
+        } else {
+            this.redux.pause();
         }
     }
 }

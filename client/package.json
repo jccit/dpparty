@@ -4,13 +4,16 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c"
+    "build": "webpack -p"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^4.1.1",
-    "rollup": "^2.6.1",
+    "ts-loader": "^7.0.0",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3",
-    "web-ext-types": "^3.2.1"
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "webextension-polyfill-ts": "^0.14.0"
   }
 }

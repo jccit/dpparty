@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Disney+ Party",
+    "name": "Disney + Friends",
     "version": "0.1",
-    "description": "Watch Disney+ with friends",
+    "description": "Watch Disney+ with friends DO NOT DISTRIBUTE",
     "permissions": [
         "activeTab",
         "webNavigation",
@@ -19,5 +19,11 @@
         },
         "default_title": "DP",
         "default_popup": "popup.html"
+    },
+    "web_accessible_resources": ["player.js"],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "disneyplus@the.yiff.army"
+        }
     }
 }

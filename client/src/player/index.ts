@@ -35,12 +35,10 @@ function initLoop(roomCode: string) {
     }
 }
 
-browser.runtime.onMessage.addListener((message) => {
-    if (message == "dp-activate" || message == "dp-join") {
-        const roomCode = message == "dp-join" ? window.location.hash.replace('#', '') : null;
+document.addEventListener('dpActivate', (e: CustomEvent) => {
+    const roomCode = e.detail;
 
-        if (!active) {
-            initLoop(roomCode);
-        }
+    if (!active) {
+        initLoop(roomCode);
     }
 });
