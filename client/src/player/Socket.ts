@@ -20,7 +20,7 @@ export default class Socket {
 
     private socketInit() {
         return new Promise((resolve, reject) => {
-            this.ws = new WebSocket('ws://localhost:8080');
+            this.ws = new WebSocket('wss://the.yiff.army:8080');
             this.ws.onopen = () => resolve();
             this.ws.onerror = (err) => reject(err);
         });
@@ -58,7 +58,6 @@ export default class Socket {
 
     onMessage(message) {
         const msg = JSON.parse(message.data);
-        console.log(msg);
 
         switch (msg.type) {
             case 'jwt':
@@ -67,7 +66,9 @@ export default class Socket {
 
             case 'joinRoom':
                 this.currentRoom = msg.state.uuid;
-                browser.runtime.sendMessage(JSON.stringify({ type: 'room', room: this.currentRoom, video: this.video.getVideoId() }));
+                document.dispatchEvent(new CustomEvent('dpRoomCode', {
+                    detail: JSON.stringify({ type: 'room', room: this.currentRoom, video: this.video.getVideoId() })
+                }));
                 break;
 
             case 'update':
