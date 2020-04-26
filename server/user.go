@@ -17,19 +17,19 @@ type UserPayload struct {
 }
 
 type User struct {
-	Name string `json:"name,omitempty"`
-	UUID string `json:"uuid,omitempty"`
-	CurrentRoom string `json:"-"`
-	Conn *websocket.Conn `json:"-"`
+	Name        string          `json:"name,omitempty"`
+	UUID        string          `json:"uuid,omitempty"`
+	CurrentRoom string          `json:"-"`
+	Conn        *websocket.Conn `json:"-"`
 
-	send chan Message
+	send    chan Message
 	closing bool
 }
 
 const (
-	pongWait = 30 * time.Second
+	pongWait   = 30 * time.Second
 	pingPeriod = (pongWait * 9) / 10
-	writeWait = 10 * time.Second
+	writeWait  = 10 * time.Second
 )
 
 func NewUUID() string {
@@ -43,10 +43,10 @@ func NewUUID() string {
 
 func NewUser(name string, conn *websocket.Conn) User {
 	return User{
-		UUID: NewUUID(),
-		Name: name,
-		Conn: conn,
-		send: make(chan Message),
+		UUID:    NewUUID(),
+		Name:    name,
+		Conn:    conn,
+		send:    make(chan Message),
 		closing: false,
 	}
 }
@@ -55,9 +55,9 @@ func GetUserJWT(user User) string {
 	now := time.Now()
 	payload := UserPayload{
 		Payload: jwt.Payload{
-			IssuedAt: jwt.NumericDate(now),
+			IssuedAt:       jwt.NumericDate(now),
 			ExpirationTime: jwt.NumericDate(now.Add(24 * time.Hour)),
-			Subject: user.UUID,
+			Subject:        user.UUID,
 		},
 		Name: user.Name,
 	}
@@ -96,14 +96,14 @@ func UserLeft(roomUUID string, userUUID string) {
 
 		// Check if room is empty, if not send update message
 
-		if len(users) == 0{
+		if len(users) == 0 {
 			// Close room
 			room.close <- true
 
 		} else {
 			room.broadcast <- MessagePacket{
 				Message: Message{
-					Type: "userLeft",
+					Type:  "userLeft",
 					State: room,
 				},
 				Sender: userUUID,
@@ -125,7 +125,7 @@ func (u *User) handleRead() {
 	}()
 
 	u.Conn.SetReadDeadline(time.Now().Add(pongWait))
-	u.Conn.SetPongHandler(func (string) error {
+	u.Conn.SetPongHandler(func(string) error {
 		u.Conn.SetReadDeadline(time.Now().Add(pongWait))
 		return nil
 	})
@@ -141,83 +141,83 @@ func (u *User) handleRead() {
 		msg := ParseMessage(string(message))
 
 		switch msg.Type {
-			case "newRoom":
-				users := make(map[string]*User)
-				users[u.UUID] = u
-				room := RoomState{
-					UUID: NewUUID(),
-					Users: users,
-					Video: msg.State.Video,
-					Playing: msg.State.Playing,
-					Time: msg.State.Time,
-					LastUpdate: time.Now().Unix(),
+		case "newRoom":
+			users := make(map[string]*User)
+			users[u.UUID] = u
+			room := RoomState{
+				UUID:       NewUUID(),
+				Users:      users,
+				Video:      msg.State.Video,
+				Playing:    msg.State.Playing,
+				Time:       msg.State.Time,
+				LastUpdate: time.Now().Unix(),
 
-					broadcast: make(chan MessagePacket),
-					newUser: make(chan *User),
-					deleteUser: make(chan *User),
-					close: make(chan bool),
-				}
+				broadcast:  make(chan MessagePacket),
+				newUser:    make(chan *User),
+				deleteUser: make(chan *User),
+				close:      make(chan bool),
+			}
 
-				go room.run()
+			go room.run()
 
-				u.CurrentRoom = room.UUID
-				rooms[room.UUID] = room
+			u.CurrentRoom = room.UUID
+			rooms[room.UUID] = room
 
-				u.send <- Message{
-					Type: "jwt",
-					JWT: GetUserJWT(*u),
-				}
+			u.send <- Message{
+				Type: "jwt",
+				JWT:  GetUserJWT(*u),
+			}
 
-				u.send <- Message{
-					Type: "joinRoom",
+			u.send <- Message{
+				Type:  "joinRoom",
+				State: room,
+			}
+		case "joinRoom":
+			room := rooms[msg.ID]
+			users := room.Users
+
+			room.broadcast <- MessagePacket{
+				Message: Message{
+					Type: "userJoined",
+					ID:   u.UUID,
+				},
+				Sender: u.UUID,
+			}
+
+			u.CurrentRoom = room.UUID
+
+			users[u.UUID] = u
+			room.Users = users
+			CalculateNewPlayTime(&room)
+			AfterUpdate(&room)
+			rooms[msg.ID] = room
+
+			u.send <- Message{
+				Type: "jwt",
+				JWT:  GetUserJWT(*u),
+			}
+
+			u.send <- Message{
+				Type:  "joinRoom",
+				State: room,
+			}
+		case "update":
+			room := rooms[msg.ID]
+			room.Playing = msg.State.Playing
+			room.Time = msg.State.Time
+			room.Video = msg.State.Video
+
+			AfterUpdate(&room)
+
+			rooms[msg.ID] = room
+
+			room.broadcast <- MessagePacket{
+				Message: Message{
+					Type:  "update",
 					State: room,
-				}
-			case "joinRoom":
-				room := rooms[msg.ID]
-				users := room.Users
-
-				room.broadcast <- MessagePacket{
-					Message: Message{
-						Type: "userJoined",
-						ID: u.UUID,
-					},
-					Sender: u.UUID,
-				}
-
-				u.CurrentRoom = room.UUID
-
-				users[u.UUID] = u
-				room.Users = users
-				CalculateNewPlayTime(&room)
-				AfterUpdate(&room)
-				rooms[msg.ID] = room
-
-				u.send <- Message{
-					Type: "jwt",
-					JWT: GetUserJWT(*u),
-				}
-
-				u.send <- Message{
-					Type: "joinRoom",
-					State: room,
-				}
-			case "update":
-				room := rooms[msg.ID]
-				room.Playing = msg.State.Playing
-				room.Time = msg.State.Time
-				room.Video = msg.State.Video
-
-				AfterUpdate(&room)
-
-				rooms[msg.ID] = room
-
-				room.broadcast <- MessagePacket{
-					Message: Message{
-						Type: "update",
-						State: room,
-					},
-					Sender: u.UUID,
-				}
+				},
+				Sender: u.UUID,
+			}
 		}
 	}
 }

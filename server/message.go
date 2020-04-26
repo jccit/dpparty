@@ -7,15 +7,15 @@ import (
 )
 
 type Message struct {
-	Type string      `json:"type,omitempty"`
-	JWT string       `json:"jwt,omitempty"`
-	ID string        `json:"id,omitempty"`
-	State RoomState  `json:"state,omitempty"`
+	Type  string    `json:"type,omitempty"`
+	JWT   string    `json:"jwt,omitempty"`
+	ID    string    `json:"id,omitempty"`
+	State RoomState `json:"state,omitempty"`
 }
 
 type MessagePacket struct {
 	Message Message
-	Sender string
+	Sender  string
 }
 
 func ParseMessage(message string) Message {
