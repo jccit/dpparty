@@ -14,5 +14,5 @@ FROM gcr.io/distroless/static
 USER nonroot
 COPY --from=builder --chown=nonroot /go/bin/app /app
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD [ "/app -health" ]
 ENTRYPOINT ["/app"]
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD [ "/app", "-health" ]
