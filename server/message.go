@@ -13,6 +13,11 @@ type Message struct {
 	State RoomState  `json:"state,omitempty"`
 }
 
+type MessagePacket struct {
+	Message Message
+	Sender string
+}
+
 func ParseMessage(message string) Message {
 	var m Message
 
