@@ -7,7 +7,7 @@
     "build": "webpack -p"
   },
   "devDependencies": {
-    "ts-loader": "^7.0.0",
+    "ts-loader": "^7.0.1",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
