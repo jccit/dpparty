@@ -7,10 +7,10 @@ COPY go.mod go.sum /go/src/app/
 RUN go mod download
 
 # Add binary sources and compile
-ADD . /go/src/app
+COPY . /go/src/app
 RUN CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags '-w -s -extldflags "-static"' -o /go/bin/app
 
-FROM gcr.io/distroless/static
+FROM gcr.io/distroless/static:latest
 USER nonroot
 COPY --from=builder --chown=nonroot /go/bin/app /app
 
