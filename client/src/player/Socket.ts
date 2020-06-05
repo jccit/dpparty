@@ -95,4 +95,8 @@ export default class Socket {
             id: roomCode
         })
     }
+
+    getRoom() {
+        return this.currentRoom;
+    }
 }

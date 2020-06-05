@@ -42,3 +42,11 @@ document.addEventListener('dpActivate', (e: CustomEvent) => {
         initLoop(roomCode);
     }
 });
+
+document.addEventListener('dpGetRoom', (e: CustomEvent) => {
+    if (active) {
+        document.dispatchEvent(new CustomEvent('dpRoomCode', {
+            detail: JSON.stringify({ type: 'room', room: socket.getRoom(), video: videoPlayer.getVideoId() })
+        }));
+    }
+});

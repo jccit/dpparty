@@ -6,16 +6,64 @@
     <style>
         body {
             padding: 10px;
+            min-width: 250px;
         }
         p {
             -moz-user-select: text;
         }
+        #link {
+            width: 100%;
+        }
+        .buttons {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .buttons button {
+            width: 50%;
+            text-align: center;
+            padding: 5px;
+        }
+        .buttons button:first-of-type {
+            margin-right: 2px;
+        }
+        .buttons button:last-of-type {
+            margin-left: 2px;
+        }
+        .error {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .error p {
+            font-size: 20px;
+            padding: 20px;
+            text-align: center;
+            user-select: none;
+        }
+        #shareMsg {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <button id="newRoom" disabled>New room</button>
-    <button id="joinRoom" disabled>Join room</button>
-    <p id="link"></p>
+    <div class="error" id="disabled">
+        <p>Start playing a video on Disney+ to use</p>
+    </div>
+
+    <div class="buttons">
+        <button id="newRoom" disabled>New room</button>
+        <button id="joinRoom" disabled>Join room</button>
+    </div>
+
+    <input id="link" readonly />
+    <p id="shareMsg">☝ Share this link with your friends to let them join your room</p>
 
     <script src="popup.js"></script>
 </body>

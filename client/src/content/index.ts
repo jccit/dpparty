@@ -7,6 +7,8 @@ browser.runtime.onMessage.addListener((message) => {
         document.dispatchEvent(new CustomEvent('dpActivate', {
             detail: roomCode
         }));
+    } else if (message == "dp-get-room") {
+        document.dispatchEvent(new CustomEvent('dpGetRoom'));
     }
 });
 
