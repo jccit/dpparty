@@ -1,4 +1,4 @@
-module github.com/jccit/dpserver
+module github.com/jccit/dpparty
 
 go 1.13
 
