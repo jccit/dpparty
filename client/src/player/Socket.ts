@@ -28,7 +28,7 @@ export default class Socket {
 
     private socketInit() {
         return new Promise((resolve, reject) => {
-            this.ws = new WebSocket('wss://***REMOVED***:8080');
+            this.ws = new WebSocket(process.env.SOCKET_URL);
             this.ws.onopen = () => resolve();
             this.ws.onerror = (err) => reject(err);
         });

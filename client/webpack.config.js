@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 
 function getConfig(modules) {
     const entry = {};
@@ -30,7 +31,10 @@ function getConfig(modules) {
         output: {
             filename: '[name].js',
             path: path.resolve(__dirname)
-        }
+        },
+        plugins: [
+            new Dotenv()
+        ]
     }
 }
 
