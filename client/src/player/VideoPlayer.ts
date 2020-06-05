@@ -11,7 +11,7 @@ export default class VideoPlayer {
 
     private redux = new Redux();
 
-    setup() {
+    setup(): boolean {
         const videoEl = document.querySelector<HTMLVideoElement>('video.btm-media-client-element');
         if (!videoEl) return false;
 
@@ -28,14 +28,14 @@ export default class VideoPlayer {
         return true;
     }
 
-    setTime(time: number) {
+    setTime(time: number): void {
         if (this.video) {
             this.lastSyncedTime = time;
             this.video.currentTime = time;
         }
     }
 
-    setPlaying(playing: boolean) {
+    setPlaying(playing: boolean): void {
         if (this.video) {
             this.shouldPlay = playing;
 
@@ -47,7 +47,7 @@ export default class VideoPlayer {
         }
     }
 
-    getVideoId() {
+    getVideoId(): string {
         return window.location.pathname.replace('/video/', '');
     }
 
@@ -70,19 +70,18 @@ export default class VideoPlayer {
             if (this.hasChangedEnough()) {
                 callback(e);
             }
-
         };
     }
 
     // Triggered when the user toggles playing
-    private handlePlayToggled(e) {
+    private handlePlayToggled() {
         const playState = !this.video.paused;
         if (this.onPlayToggled) {
             this.onPlayToggled(playState);
         }
     }
 
-    private handleSeeked(e) {
+    private handleSeeked() {
         const time = this.video.currentTime;
         if (this.onSeeked) {
             this.onSeeked(time);

@@ -1,4 +1,12 @@
 import VideoPlayer from "./VideoPlayer";
+import IPlaybackState from "./IPlaybackState";
+
+interface ISocketMessage {
+    type: string,
+    id?: string,
+    state?: IPlaybackState,
+    jwt?: string
+}
 
 export default class Socket {
     private ws: WebSocket;
@@ -12,7 +20,7 @@ export default class Socket {
         this.video.onSeeked = this.onSeeked.bind(this);
     }
 
-    async connect() {
+    async connect(): Promise<void> {
         await this.socketInit();
         this.ws.onmessage = this.onMessage.bind(this);
         this.ws.onerror = null;
@@ -26,7 +34,7 @@ export default class Socket {
         });
     }
 
-    send(data: object) {
+    send(data: ISocketMessage): void {
         let msg = data;
 
         if (this.jwt) {
@@ -39,15 +47,15 @@ export default class Socket {
         this.ws.send(JSON.stringify(msg));
     }
 
-    onPlayToggled(playing: boolean) {
+    onPlayToggled(): void {
         this.updateState();
     }
 
-    onSeeked(time: number) {
+    onSeeked(): void {
         this.updateState();
     }
 
-    updateState() {
+    updateState(): void {
         const state = this.video.getPlaybackState();
         this.send({
             type: 'update',
@@ -56,8 +64,8 @@ export default class Socket {
         });
     }
 
-    onMessage(message) {
-        const msg = JSON.parse(message.data);
+    onMessage(message: { data: string }): void {
+        const msg: ISocketMessage = JSON.parse(message.data);
 
         switch (msg.type) {
             case 'jwt':
@@ -81,7 +89,7 @@ export default class Socket {
         }
     }
 
-    newRoom() {
+    newRoom(): void {
         const state = this.video.getPlaybackState();
         this.send({
             type: "newRoom",
@@ -89,14 +97,14 @@ export default class Socket {
         })
     }
 
-    joinRoom(roomCode: string) {
+    joinRoom(roomCode: string): void {
         this.send({
             type: "joinRoom",
             id: roomCode
         })
     }
 
-    getRoom() {
+    getRoom(): string {
         return this.currentRoom;
     }
 }

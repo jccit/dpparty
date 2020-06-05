@@ -1,6 +1,12 @@
+interface IReduxAction {
+    type: string,
+    generatedBy?: string,
+    value?: any,
+}
+
 export default class Redux {
-    private _getState: () => object;
-    private _dispatch: (object) => object;
+    private _getState: () => any;
+    private _dispatch: (object) => any;
 
     private PLAYBACK_PREFIX = "@@btmp/PLAYBACK";
 
@@ -16,7 +22,7 @@ export default class Redux {
         return instance;
     }
 
-    findHooks() {
+    findHooks(): void {
         const root = document.querySelector('video.btm-media-client-element');
         let instance = this.getReactInstance(root);
         let done = false;
@@ -42,7 +48,7 @@ export default class Redux {
         }
     }
 
-    dispatch(action) {
+    dispatch(action: IReduxAction): void {
         if (this.dispatch) {
             this._dispatch(action);
         }
@@ -54,7 +60,7 @@ export default class Redux {
         }
     }
 
-    play() {
+    play(): void {
         this.withUI(() => {
             this.dispatch({
                 type: this.getPlaybackAction('PLAY'),
@@ -63,7 +69,7 @@ export default class Redux {
         });
     }
 
-    pause() {
+    pause(): void {
         this.withUI(() => {
             this.dispatch({
                 type: this.getPlaybackAction('PAUSE'),
@@ -72,7 +78,7 @@ export default class Redux {
         });
     }
 
-    showUI() {
+    showUI(): void {
         console.log(this.dispatch);
         console.log(this.getState());
         this.dispatch({
@@ -81,7 +87,7 @@ export default class Redux {
         });
     }
 
-    hideUI() {
+    hideUI(): void {
         this.dispatch({
             type: "@@btmp-ui/UI/OVERLAY/CONTROLS/SET_DECAY_REACHED",
             value: true
