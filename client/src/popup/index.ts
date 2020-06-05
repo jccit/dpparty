@@ -15,9 +15,19 @@ browser.tabs.query({
         newRoom.disabled = false;
         joinRoom.disabled = false;
 
-        browser.browserAction.setIcon({ path: { 38: "images/icon-38-active.png" }});
+        browser.browserAction.setIcon({
+            path: {
+                48: "images/icon-48-active.png",
+                96: "images/icon-96-active.png"
+            }
+        });
     } else {
-        browser.browserAction.setIcon({ path: { 38: "images/icon-38.png" }});
+        browser.browserAction.setIcon({
+            path: {
+                48: "images/icon-48.png",
+                96: "images/icon-96.png"
+            }
+        });
     }
 });
 

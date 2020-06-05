@@ -1,15 +1,25 @@
 import { browser } from "webextension-polyfill-ts";
 
 function onPageChanged(e) {
-    if (e.url.indexOf('/video/') > 0) {
+    if (e.url.indexOf("https://www.disneyplus.com/video/") === 0) {
         browser.tabs.executeScript({
             file: "content.js",
             runAt: "document_end"
         });
 
-        browser.browserAction.setIcon({ path: { 38: "images/icon-38-active.png" }});
+        browser.browserAction.setIcon({
+            path: {
+                48: "images/icon-48-active.png",
+                96: "images/icon-96-active.png"
+            }
+        });
     } else {
-        browser.browserAction.setIcon({ path: { 38: "images/icon-38.png" }});
+        browser.browserAction.setIcon({
+            path: {
+                48: "images/icon-48.png",
+                96: "images/icon-96.png"
+            }
+        });
     }
 }
 

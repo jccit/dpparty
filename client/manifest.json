@@ -8,6 +8,10 @@
         "webNavigation",
         "https://www.disneyplus.com/*"
     ],
+    "icons": {
+        "48": "images/icon-48-active.png",
+        "96": "images/icon-96-active.png"
+    },
     "background": {
         "scripts": ["background.js"],
         "persistent": false
