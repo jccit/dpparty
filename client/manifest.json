@@ -1,7 +1,11 @@
 {
     "manifest_version": 2,
     "name": "DP Party",
-    "version": "0.1",
+    "version": "1.0",
+    "developer": {
+        "name": "jccit",
+        "url": "https://github.com/jccit"
+    },
     "description": "Watch Disney+ with friends",
     "permissions": [
         "activeTab",
