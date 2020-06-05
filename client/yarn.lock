@@ -2587,15 +2587,10 @@ watchpack@^1.6.0:
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
 
-web-ext-types@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/web-ext-types/-/web-ext-types-3.2.1.tgz#3edc0e3c2e8fe121d7d7e4ca0b7ee0c883cea832"
-  integrity sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==
-
-webextension-polyfill-ts@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/webextension-polyfill-ts/-/webextension-polyfill-ts-0.14.0.tgz#37c56852613f9b9fa4992ba673b615d8fcaf1e24"
-  integrity sha512-eBfjCgF8IvxKCphygM2MxQi1ixtxrzxz3k3cLQ2er2KUDJqWc8qkR5YjOH62PdPI9slJHYV4kHuQN3bG9/sQqw==
+webextension-polyfill-ts@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/webextension-polyfill-ts/-/webextension-polyfill-ts-0.16.0.tgz#3c4fffdf16885127eabfeb067da071e641296cfc"
+  integrity sha512-ibuzJf6lVbH5kKjRBzqNaF+C2tjfDNUtkT/h6RQlEt0zvW3HpLO9ESNJcyXCsPGgeBuXQfJprND/EiwCzIkYRw==
   dependencies:
     webextension-polyfill "^0.6.0"
 
