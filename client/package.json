@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "dotenv-webpack": "^1.8.0",
-    "webextension-polyfill-ts": "^0.16.0",
+    "webextension-polyfill-ts": "^0.17.0",
     "snyk": "^1.336.0"
   },
   "snyk": true
