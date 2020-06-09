@@ -8,7 +8,9 @@ updates:
   - package-ecosystem: "npm"
     directory: "/client"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    allow:
+      - dependency-name: "webextension-polyfill-ts"
 
   - package-ecosystem: "gomod"
     directory: "/server"
