@@ -5,21 +5,17 @@ let currentTab = -1;
 
 async function onPageChanged(e: WebNavigation.OnCompletedDetailsType | WebNavigation.OnCompletedDetailsType) {
     if (e.url.indexOf("https://www.disneyplus.com/video/") === 0) {
-        // Load script if needed
-        if (currentTab == -1) {
-            await browser.tabs.executeScript(currentTab, {
-                file: "content.js",
-                runAt: "document_end"
-            });
-        }
-
         currentTab = e.tabId;
         const url = new URL(e.url);
         const videoId = url.pathname.split("/").pop();
 
         // Send video id
-        browser.tabs.sendMessage(currentTab, `dp-video-changed|${videoId}`);
-        console.log("Video ID:", videoId);
+        try {
+            await browser.tabs.sendMessage(currentTab, `dp-video-changed|${videoId}`);
+            console.log("New video ID:", videoId);
+        } catch (err) {
+            console.error(err);
+        }
 
         browser.browserAction.setIcon({
             path: {

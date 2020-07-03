@@ -12,7 +12,7 @@ browser.runtime.onMessage.addListener((message: string) => {
     } else if (message.indexOf("dp-video-changed") > -1) {
         const videoId = message.split("|").pop();
 
-        console.log("Got video id from background", videoId);
+        console.log("[DP] Got video id from background", videoId);
 
         document.dispatchEvent(new CustomEvent("dpVideoChanged", {
             detail: videoId
@@ -28,3 +28,5 @@ document.addEventListener('dpRoomCode', (e: CustomEvent) => {
 const script = document.createElement('script');
 script.src = browser.extension.getURL('player.js');
 (document.head||document.documentElement).appendChild(script);
+
+console.log('[DP] Content script loaded');
