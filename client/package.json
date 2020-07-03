@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "BSD-3-Clause",
   "scripts": {
+    "dev": "webpack",
     "build": "webpack -p",
     "lint": "eslint . --ext .ts",
     "snyk-protect": "snyk protect",

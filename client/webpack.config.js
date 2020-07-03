@@ -11,6 +11,7 @@ function getConfig(modules) {
     return {
         entry,
         mode: 'development',
+        devtool: 'inline-source-map',
         module: {
             rules: [
                 {
