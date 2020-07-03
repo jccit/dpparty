@@ -7,6 +7,7 @@ interface IReduxAction {
 export default class Redux {
     private _getState: () => any;
     private _dispatch: (object) => any;
+    private _navigate: (object) => any;
 
     private PLAYBACK_PREFIX = "@@btmp/PLAYBACK";
 
@@ -25,25 +26,34 @@ export default class Redux {
     findHooks(): void {
         const root = document.querySelector('video.btm-media-client-element');
         let instance = this.getReactInstance(root);
-        let done = false;
+        let foundState = false;
+        let foundNavigate = false;
 
-        while (!done) {
+        while (!(foundState && foundNavigate)) {
             if (instance) {
-                if (typeof instance.type === "object" && instance.type && ('$$typeof' in instance.type) && typeof instance.type.$$typeof === "symbol") {
-                    if (instance.type.$$typeof.description == "react.provider") {
-                        const store = instance.memoizedProps.value.store;
-                        console.log(instance);
-                        this._dispatch = store.dispatch;
-                        this._getState = store.getState;
-                        done = true;
-                    } else {
-                        instance = instance.return;
+                if (!foundState) {
+                    if (typeof instance.type === "object" && instance.type && ('$$typeof' in instance.type) && typeof instance.type.$$typeof === "symbol") {
+                        if (instance.type.$$typeof.description == "react.provider") {
+                            const store = instance.memoizedProps.value.store;
+                            this._dispatch = store.dispatch;
+                            this._getState = store.getState;
+                            foundState = true;
+                        }
                     }
-                } else {
-                    instance = instance.return;
                 }
+
+                if (!foundNavigate) {
+                    if ('navigate' in instance.memoizedProps) {
+                        this._navigate = instance.memoizedProps.navigate;
+                        foundNavigate = true;
+                    }
+                }
+
+                instance = instance.return;
             } else {
-                done = true;
+                // bail out
+                foundState = true;
+                foundNavigate = true;
             }
         }
     }
@@ -91,6 +101,15 @@ export default class Redux {
         this.dispatch({
             type: "@@btmp-ui/UI/OVERLAY/CONTROLS/SET_DECAY_REACHED",
             value: true
+        });
+    }
+
+    changeVideo(videoID: string): void {
+        this._navigate({
+            name: "video",
+            params: {
+                contentId: videoID
+            }
         });
     }
 

@@ -1,6 +1,6 @@
 import { browser } from "webextension-polyfill-ts";
 
-browser.runtime.onMessage.addListener((message) => {
+browser.runtime.onMessage.addListener((message: string) => {
     if (message == "dp-activate" || message == "dp-join") {
         const roomCode = message == "dp-join" ? window.location.hash.replace('#', '') : null;
 
@@ -9,6 +9,14 @@ browser.runtime.onMessage.addListener((message) => {
         }));
     } else if (message == "dp-get-room") {
         document.dispatchEvent(new CustomEvent('dpGetRoom'));
+    } else if (message.indexOf("dp-video-changed") > -1) {
+        const videoId = message.split("|").pop();
+
+        console.log("[DP] Got video id from background", videoId);
+
+        document.dispatchEvent(new CustomEvent("dpVideoChanged", {
+            detail: videoId
+        }));
     }
 });
 
@@ -20,3 +28,5 @@ document.addEventListener('dpRoomCode', (e: CustomEvent) => {
 const script = document.createElement('script');
 script.src = browser.extension.getURL('player.js');
 (document.head||document.documentElement).appendChild(script);
+
+console.log('[DP] Content script loaded');

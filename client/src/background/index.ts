@@ -1,11 +1,21 @@
-import { browser } from "webextension-polyfill-ts";
+import { browser, WebNavigation } from "webextension-polyfill-ts";
 
-function onPageChanged(e) {
+// Store the current video player tab id
+let currentTab = -1;
+
+async function onPageChanged(e: WebNavigation.OnCompletedDetailsType | WebNavigation.OnCompletedDetailsType) {
     if (e.url.indexOf("https://www.disneyplus.com/video/") === 0) {
-        browser.tabs.executeScript({
-            file: "content.js",
-            runAt: "document_end"
-        });
+        currentTab = e.tabId;
+        const url = new URL(e.url);
+        const videoId = url.pathname.split("/").pop();
+
+        // Send video id
+        try {
+            await browser.tabs.sendMessage(currentTab, `dp-video-changed|${videoId}`);
+            console.log("New video ID:", videoId);
+        } catch (err) {
+            console.error(err);
+        }
 
         browser.browserAction.setIcon({
             path: {
@@ -14,6 +24,11 @@ function onPageChanged(e) {
             }
         });
     } else {
+        if (e.tabId === currentTab) {
+            // User has navigated away from video, remove current tab
+            currentTab = -1;
+        }
+
         browser.browserAction.setIcon({
             path: {
                 48: "images/icon-48.png",

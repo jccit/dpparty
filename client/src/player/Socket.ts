@@ -13,11 +13,18 @@ export default class Socket {
     private video: VideoPlayer;
     private jwt: string;
     private currentRoom: string;
+    private lastState: IPlaybackState;
 
     constructor(videoPlayer: VideoPlayer) {
+        this.setPlayer(videoPlayer);
+    }
+
+    setPlayer(videoPlayer: VideoPlayer): void {
         this.video = videoPlayer;
         this.video.onPlayToggled = this.onPlayToggled.bind(this);
         this.video.onSeeked = this.onSeeked.bind(this);
+
+        this.lastState = this.video.getPlaybackState();
     }
 
     async connect(): Promise<void> {
@@ -66,6 +73,9 @@ export default class Socket {
 
     onMessage(message: { data: string }): void {
         const msg: ISocketMessage = JSON.parse(message.data);
+        if (msg.state) {
+            this.lastState = msg.state;
+        }
 
         switch (msg.type) {
             case 'jwt':
@@ -82,6 +92,10 @@ export default class Socket {
             case 'update':
                 this.video.setTime(msg.state.time);
                 this.video.setPlaying(msg.state.playing);
+
+                if (this.video.getVideoId() != msg.state.video) {
+                    this.video.changeVideo(msg.state.video);
+                }
                 break;
 
             default:
@@ -106,5 +120,19 @@ export default class Socket {
 
     getRoom(): string {
         return this.currentRoom;
+    }
+
+    changeVideo(newVideo: string): void {
+        if (newVideo != this.lastState.video) {
+            this.send({
+                type: 'update',
+                id: this.currentRoom,
+                state: {
+                    playing: true,
+                    time: 0,
+                    video: newVideo
+                }
+            });
+        }
     }
 }

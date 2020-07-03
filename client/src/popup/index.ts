@@ -38,6 +38,7 @@ browser.tabs.query({
 });
 
 newRoom.addEventListener('click', () => {
+    console.log("New room", currentTab);
     browser.tabs.sendMessage(currentTab.id, "dp-activate");
     newRoom.disabled = true;
     joinRoom.disabled = true;

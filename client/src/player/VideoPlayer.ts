@@ -17,6 +17,12 @@ export default class VideoPlayer {
 
         this.redux.findHooks();
 
+        const playbackState = this.redux.getState().get('player').get('extensions').get('playback').get('currentState');
+        const notReady = this.redux.getState().get('player').get('extensions').get('playback').get('notready');
+        console.log(playbackState, notReady);
+
+        if (notReady) return false;
+
         this.video = videoEl;
         this.video.addEventListener('play', this.eventHandler(this.handlePlayToggled.bind(this)));
         this.video.addEventListener('pause', this.eventHandler(this.handlePlayToggled.bind(this)));
@@ -57,6 +63,10 @@ export default class VideoPlayer {
             time: this.video.currentTime,
             video: this.getVideoId()
         };
+    }
+
+    changeVideo(videoID: string): void {
+        this.redux.changeVideo(videoID);
     }
 
     private hasChangedEnough() {

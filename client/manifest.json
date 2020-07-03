@@ -28,6 +28,12 @@
         "default_title": "DP",
         "default_popup": "popup.html"
     },
+    "content_scripts": [
+        {
+            "matches": ["https://www.disneyplus.com/video/*"],
+            "js": ["content.js"]
+        }
+    ],
     "web_accessible_resources": ["player.js"],
     "browser_specific_settings": {
         "gecko": {
