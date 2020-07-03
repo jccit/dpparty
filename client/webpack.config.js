@@ -1,6 +1,8 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 function getConfig(modules) {
     const entry = {};
 
@@ -10,8 +12,8 @@ function getConfig(modules) {
 
     return {
         entry,
-        mode: 'development',
-        devtool: 'inline-source-map',
+        mode: isProd ? 'production' : 'development',
+        devtool: isProd ? 'none' : 'inline-source-map',
         module: {
             rules: [
                 {

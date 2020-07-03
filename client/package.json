@@ -5,7 +5,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "dev": "webpack",
-    "build": "webpack -p",
+    "build": "NODE_ENV=production webpack -p",
     "lint": "eslint . --ext .ts",
     "snyk-protect": "snyk protect",
     "prepare": "yarn run snyk-protect"
