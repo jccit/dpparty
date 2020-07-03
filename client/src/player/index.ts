@@ -50,3 +50,7 @@ document.addEventListener('dpGetRoom', () => {
         }));
     }
 });
+
+document.addEventListener('dpVideoChanged', (e: any) => {
+    console.log("Video change event", e);
+});
