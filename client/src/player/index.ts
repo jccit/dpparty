@@ -1,21 +1,29 @@
 import VideoPlayer from './VideoPlayer';
 import Socket from './Socket';
 
-const videoPlayer = new VideoPlayer();
+let videoPlayer;
 let socket: Socket;
 let active = false;
+let lastRoomCode = '';
 
 async function initDP(roomCode: string) {
     try {
+        videoPlayer = new VideoPlayer();
         if (!videoPlayer.setup()) return false;
 
-        socket = new Socket(videoPlayer);
-        await socket.connect();
+        console.log(videoPlayer);
 
-        if (!roomCode) {
-            socket.newRoom();
+        if (socket) {
+            socket.setPlayer(videoPlayer);
         } else {
-            socket.joinRoom(roomCode);
+            socket = new Socket(videoPlayer);
+            await socket.connect();
+
+            if (!roomCode) {
+                socket.newRoom();
+            } else {
+                socket.joinRoom(roomCode);
+            }
         }
     } catch {
         return false;
@@ -26,8 +34,11 @@ async function initDP(roomCode: string) {
     return true;
 }
 
-function initLoop(roomCode: string) {
-    if (!initDP(roomCode)) {
+async function initLoop(roomCode: string) {
+    lastRoomCode = roomCode;
+    const success = await initDP(roomCode);
+
+    if (!success) {
         console.warn('[DP] Init failed');
         setTimeout(initLoop.bind(this), 500);
     } else {
@@ -52,5 +63,11 @@ document.addEventListener('dpGetRoom', () => {
 });
 
 document.addEventListener('dpVideoChanged', (e: any) => {
-    console.log("Video change event", e);
+    if (active) {
+        console.log("Video change event", e);
+
+        active = false;
+        socket.changeVideo(e.detail);
+        initLoop(lastRoomCode);
+    }
 });
