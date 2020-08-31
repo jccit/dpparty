@@ -1,4 +1,6 @@
 node_modules/
+dist/
+web-ext-artifacts/
 background.js
 content.js
 player.js

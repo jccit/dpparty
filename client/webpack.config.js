@@ -1,5 +1,6 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -33,10 +34,15 @@ function getConfig(modules) {
         },
         output: {
             filename: '[name].js',
-            path: path.resolve(__dirname)
+            path: path.resolve(__dirname, 'dist')
         },
         plugins: [
-            new Dotenv()
+            new Dotenv(),
+            new CopyPlugin({
+                patterns: [
+                    { from: 'public', to: '.' },
+                ],
+            })
         ]
     }
 }
