@@ -1,6 +1,8 @@
 github.com/gbrlsnchs/jwt v1.1.0 h1:Gh2CoXcIfk8/LxV8ks0GDOmUDCpVIrw8Oa34Ozmw/10=
 github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.2 h1:3t7jvTkeQfk1FdP0noXSNiM6AdBokLz7QmZDmnCHAAA=
 github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.2/go.mod h1:AncDcjXz18xetI3A6STfXq2w+LuTx8pQ8bGEwRN8zVM=
+github.com/gbrlsnchs/jwt/v3 v3.0.0 h1:gtPjdT3gAbBLjVckJsgNf+a46sqrCBfRebg2r/NysIo=
+github.com/gbrlsnchs/jwt/v3 v3.0.0/go.mod h1:AncDcjXz18xetI3A6STfXq2w+LuTx8pQ8bGEwRN8zVM=
 github.com/google/go-cmp v0.4.0 h1:xsAVV57WRhGj6kEIi8ReJzQlHHqcBYCElAvkovg3B/4=
 github.com/google/go-cmp v0.4.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
